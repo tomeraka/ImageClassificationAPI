@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ImageClassificationAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/")]
     public class ClassificationController : ControllerBase
     {
         private readonly ILogger<ClassificationController> _logger;
@@ -21,9 +21,18 @@ namespace ImageClassificationAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [Route("classifyimage")]
         public IActionResult ClassifyImage(IFormFile imageFile)
         {
             // validate image file, handle exceptions
+            string FileValidity = FileValidation.VerifyInputFile(imageFile);
+            if (FileValidity != "ok")
+            {
+                _logger.LogInformation("Invalid file uploaded: " + FileValidity);
+                return BadRequest(FileValidity);
+            }
+
             // preprocess image
             // create a tensor
             // run model, get classifications
