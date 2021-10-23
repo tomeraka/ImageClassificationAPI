@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,9 @@ namespace ImageClassificationAPI.Controllers
             }
 
             // preprocess image
+            using var imageMemoryStream = new MemoryStream();
+            imageFile.CopyTo(imageMemoryStream);
+
             // create a tensor
             // run model, get classifications
             // return response
