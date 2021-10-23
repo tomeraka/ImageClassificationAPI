@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,18 @@ namespace ImageClassificationAPI
         public static Image<Rgb24> Preprocess(MemoryStream inputImageStream)
         {
             using var image = Image.Load<Rgb24>(inputImageStream.ToArray(), out IImageFormat imageFormat);
+
+            using var preprocessedImageStream = new MemoryStream();
+
+            image.Mutate(x =>
+            {
+                x.Resize(new ResizeOptions()
+                {
+                    Size = new Size(256, 256),
+                    Mode = ResizeMode.Crop
+                });
+            });
+            image.Save(preprocessedImageStream, imageFormat);
 
             return image;
         }
