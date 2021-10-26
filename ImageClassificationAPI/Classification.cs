@@ -1,6 +1,7 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,16 @@ namespace ImageClassificationAPI
         {
             this.Prediction = Prediction;
             this.Confidence = Confidence;
+        }
+
+        public static List<string> ReadLabels()
+        {
+            List<string> LabelList = new List<string>();
+            foreach (string line in File.ReadLines(@"onnx-models/labels.txt"))
+            {
+                LabelList.Append(line);
+            }
+            return LabelList;
         }
 
         public static Classification Classify(DenseTensor<float> tensor)
