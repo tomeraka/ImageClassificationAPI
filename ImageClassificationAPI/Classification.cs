@@ -24,15 +24,15 @@ namespace ImageClassificationAPI
             List<string> LabelList = new List<string>();
             foreach (string line in File.ReadLines(@"onnx-models/labels.txt"))
             {
-                LabelList.Append(line);
+                LabelList.Add(line);
             }
             return LabelList;
         }
 
         public static Classification[] Classify(DenseTensor<float> tensor)
         {
-            var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor("inputs", tensor) };
-            var outputs = new List<string> { };
+            var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor("input_1", tensor) };
+            var outputs = new List<string> {"dense"};
             using var session = new InferenceSession(@"onnx-models/fine_tuned_mobilenet.onnx");
             using var predictions = session.Run(inputs, outputs);
 
