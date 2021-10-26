@@ -1,0 +1,3 @@
+cat
+dog
+neither a cat or a dog
