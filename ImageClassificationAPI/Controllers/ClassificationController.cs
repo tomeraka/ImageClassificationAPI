@@ -42,8 +42,10 @@ namespace ImageClassificationAPI.Controllers
             _logger.LogInformation("Image uploaded and preprocessed");
 
             // run model, get classifications
+            var result = Classification.Classify(tensor);
+
             // return response
-            return Ok();
+            return Ok(result);
         }
     }
 }
