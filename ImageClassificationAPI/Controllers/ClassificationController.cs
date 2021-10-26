@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,11 +35,12 @@ namespace ImageClassificationAPI.Controllers
                 return BadRequest(FileValidity);
             }
 
-            // preprocess image
+            // preprocess image, get tensor
             using var imageMemoryStream = new MemoryStream();
             imageFile.CopyTo(imageMemoryStream);
+            DenseTensor<float> tensor = ImagePreprocessing.Preprocess(imageMemoryStream);
+            _logger.LogInformation("Image uploaded and preprocessed");
 
-            // create a tensor
             // run model, get classifications
             // return response
             return Ok();
