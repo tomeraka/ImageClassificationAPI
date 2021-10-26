@@ -43,6 +43,7 @@ namespace ImageClassificationAPI.Controllers
 
             // run model, get classifications
             var result = Classification.Classify(tensor);
+            _logger.LogInformation("Image classified");
 
             // return response
             return Ok(result);

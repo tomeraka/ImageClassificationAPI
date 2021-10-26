@@ -29,15 +29,21 @@ namespace ImageClassificationAPI
             return LabelList;
         }
 
-        public static Classification Classify(DenseTensor<float> tensor)
+        public static Classification[] Classify(DenseTensor<float> tensor)
         {
             var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor("inputs", tensor) };
             var outputs = new List<string> { };
             using var session = new InferenceSession(@"onnx-models/fine_tuned_mobilenet.onnx");
             using var predictions = session.Run(inputs, outputs);
 
-            var clf = new Classification("Dog", 0.5);
-            return clf;
+            var labels = ReadLabels();
+
+            var results = (predictions.First().Value as IEnumerable<float>)
+                .Select((x, i) => new Classification(labels[i], x))
+                .OrderByDescending(x => x.Confidence)
+                .ToArray();
+
+            return results;
         }
     }
 }
