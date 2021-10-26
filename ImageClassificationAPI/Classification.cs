@@ -1,4 +1,5 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
+﻿using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +31,9 @@ namespace ImageClassificationAPI
 
         public static Classification Classify(DenseTensor<float> tensor)
         {
+            var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor("inputs", tensor) };
+            var outputs = new List<string> { };
+
             var clf = new Classification("Dog", 0.5);
             return clf;
         }

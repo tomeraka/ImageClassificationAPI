@@ -23,7 +23,7 @@ namespace ImageClassificationAPI
             {
                 x.Resize(new ResizeOptions()
                 {
-                    Size = new Size(256, 256),
+                    Size = new Size(224, 224),
                     Mode = ResizeMode.Crop
                 });
             });
