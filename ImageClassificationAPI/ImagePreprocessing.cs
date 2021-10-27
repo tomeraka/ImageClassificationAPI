@@ -13,6 +13,9 @@ namespace ImageClassificationAPI
 {
     public class ImagePreprocessing
     {
+        public const int IMAGE_WIDTH = 224;
+        public const int IMAGE_HEIGHT = 224;
+
         public static DenseTensor<float> Preprocess(MemoryStream inputImageStream)
         {
             using var image = Image.Load<Rgb24>(inputImageStream.ToArray(), out IImageFormat imageFormat);
@@ -23,7 +26,7 @@ namespace ImageClassificationAPI
             {
                 x.Resize(new ResizeOptions()
                 {
-                    Size = new Size(224, 224),
+                    Size = new Size(IMAGE_WIDTH, IMAGE_HEIGHT),
                     Mode = ResizeMode.Crop
                 });
             });

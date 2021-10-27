@@ -13,6 +13,10 @@ namespace ImageClassificationAPI
         public string Prediction { get; set; }
         public double Confidence { get; set; }
 
+        public const string MODEL_FILE = "fine_tuned_mobilenet.onnx";
+        public const string MODEL_INPUTS = "input_1";
+        public const string MODEL_OUTPUTS = "dense";
+
         public Classification(string Prediction, double Confidence)
         {
             this.Prediction = Prediction;
@@ -31,9 +35,9 @@ namespace ImageClassificationAPI
 
         public static Classification[] Classify(DenseTensor<float> tensor)
         {
-            var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor("input_1", tensor) };
-            var outputs = new List<string> {"dense"};
-            using var session = new InferenceSession(@"onnx-models/fine_tuned_mobilenet.onnx");
+            var inputs = new List<NamedOnnxValue>() { NamedOnnxValue.CreateFromTensor(MODEL_INPUTS, tensor) };
+            var outputs = new List<string> { MODEL_OUTPUTS };
+            using var session = new InferenceSession(Path.Combine(@"onnx-models/", MODEL_FILE));
             using var predictions = session.Run(inputs, outputs);
 
             var labels = ReadLabels();
